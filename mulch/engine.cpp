@@ -12,9 +12,9 @@
 //
 //  File:       engine.cpp
 //
-//  Contents:   implementation for rpattern methods, definitions for all the
-//              subexpression types used to perform the matching, the
-//              charset class definition .
+//  Contents:   parses a given chemical equation
+//              finds the elements present as well as their quantities
+//              returns two parallel vectors .
 //
 //  Classes:    engine
 //
@@ -44,11 +44,17 @@ engine::~engine(void)
 
 void engine::parseInput(char input[]){
 
-	int endOfString = 0;			// Variable that stores the end of the string
-	int i;							// Loop counter
-	int k;                          // Another loop counter
-	vector <string> foundElements;  // Vector that stores the number of found elements
-	string temp;                    // A temporary string
+	int endOfString = 0;			    // Variable that stores the end of the string
+	int i;							    // Loop counter
+	int k;                              // Another loop counter
+	int g;                              // Yet Another loop counter  
+	int z;                              // HOW MANY!!!!
+	vector <string> foundElements;      // Vector that stores the number of found elements
+	vector <int> digitsFound;           // A vector that accumulates digits that will later be summed
+	vector <int> amountOfFoundElements; // Vector parallel to foundElements
+	string temp;                        // A temporary string
+	int tempsum = 0;                    // A temporary sum of the amount of elements
+	bool paren = false;                 // A boolean representing the state of parenthesis in the equation
 
 
 	// Determine the end of the string
@@ -68,6 +74,12 @@ void engine::parseInput(char input[]){
 		// Check to make sure its not a whitespace character
 
 		if(isspace(input[i])){
+			continue;
+		}
+
+		// Check to make sure its not a + or = character
+
+		if((input[i] == '+') || (input[i] == '=')){
 			continue;
 		}
 
@@ -111,7 +123,7 @@ void engine::parseInput(char input[]){
 
 			/* DOUBLE LETTER CHECK! */
 
-			if(isupper(input[i]) && (!isupper(input[i+1])) && (!isspace(input[i+1])) && (!isdigit(input[i+1])) ){
+			if(isupper(input[i]) && (!isupper(input[i+1])) && (!isspace(input[i+1])) && (!isdigit(input[i+1])) && (input[i+1] != '+')  && (input[i+1] != '=')){
 
 				temp.push_back(input[i]);
 				temp.push_back(input[i+1]);
@@ -143,6 +155,52 @@ void engine::parseInput(char input[]){
 	for(i = 0; i < foundElements.size(); i++){
 
 		cout << "\n" << foundElements[i] << "\n";
+
+	}
+
+	// Now match the vector the public accesible vector
+
+	this->DATA_BASE.elementNames = foundElements;
+
+	/* BEGIN COUNTING THE AMOUNT OF ELEMENTS*/
+
+	// Loop through each of the found elements
+
+	for(i = 0; i < foundElements.size(); i++){
+
+		// Find instance of the element in the string of input
+
+		for(g = 0; g < endOfString; g++){
+
+			// See if we've hit parenthesis
+			
+			if(input[g] == '('){
+				paren = true;
+			}
+
+			if(input[g] == ')'){
+				paren = false;
+			}
+
+			// See if we've found the element
+
+			// TODO
+
+
+		}
+
+
+		/* SUM UP THE CONTENTS OF digitsFound and INJECT IT*/
+
+		for(k = 0; k < digitsFound.size(); k++){
+			tempsum = tempsum + digitsFound[k];
+		}
+
+		amountOfFoundElements.push_back(tempsum);
+
+		// Reset sum
+
+		tempsum = 0;
 
 	}
 
