@@ -254,7 +254,67 @@ void engine::parseInput(char input[]){
 
 			if(foundElements[i].size() == 2){
 				
-				// TODO:
+				if(input[g] == foundElements[i].at(0) && input[g + 1] == foundElements[i].at(1)){
+
+					// Check to see if numbers are present after the element name and we're not in parenthesis mode
+
+					if(isdigit(input[g + 2]) && paren == false){
+						
+						digitsFound.push_back(input[g + 2] - '0');
+
+					}
+
+					// If no digit is specified and parenthesis mode is off, then assume one
+
+					if(!isdigit(input[g + 2]) && paren == false){
+						
+						digitsFound.push_back(1);
+
+					}
+
+					// If a digit is specified and we are in parenthesis mode do the multiplication
+
+					if(isdigit(input[g + 2]) && paren == true){
+
+						// Find the number after the next closing parenthesis in the input
+
+						for(j = g + 2; j < endOfString; j++){
+
+							if(input[j] == ')'){
+								
+								digitafterparen = input[j + 1] - '0';
+								break;
+							
+							}
+
+						}
+
+						digitsFound.push_back((input[g + 2] - '0') * digitafterparen);
+
+					}
+
+					// If a digit is not specified and we are in parenthesis mode do the multiplication with one
+
+					if(!isdigit(input[g + 2]) && paren == true){
+
+						// Find the number after the next closing parenthesis in the input
+
+						for(j = g + 2; j < endOfString; j++){
+
+							if(input[j] == ')'){
+								
+								digitafterparen = input[j + 1] - '0';
+								break;
+							
+							}
+
+						}
+
+						digitsFound.push_back(1 * digitafterparen);
+
+					}
+
+				}
 			
 			}
 
