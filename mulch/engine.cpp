@@ -49,12 +49,14 @@ void engine::parseInput(char input[]){
 	int k;                              // Another loop counter
 	int g;                              // Yet Another loop counter  
 	int z;                              // HOW MANY!!!!
+	int j;                              // PLEASE STOP!
 	vector <string> foundElements;      // Vector that stores the number of found elements
 	vector <int> digitsFound;           // A vector that accumulates digits that will later be summed
 	vector <int> amountOfFoundElements; // Vector parallel to foundElements
 	string temp;                        // A temporary string
 	int tempsum = 0;                    // A temporary sum of the amount of elements
 	bool paren = false;                 // A boolean representing the state of parenthesis in the equation
+	int digitafterparen;                // In integer representing the number after the parenthesis
 
 
 	// Determine the end of the string
@@ -123,7 +125,7 @@ void engine::parseInput(char input[]){
 
 			/* DOUBLE LETTER CHECK! */
 
-			if(isupper(input[i]) && (!isupper(input[i+1])) && (!isspace(input[i+1])) && (!isdigit(input[i+1])) && (input[i+1] != '+')  && (input[i+1] != '=')){
+			if(isupper(input[i]) && (!isupper(input[i+1])) && (!isspace(input[i+1])) && (!isdigit(input[i+1])) && (input[i+1] != '+')  && (input[i+1] != '=')  && (input[i+1] != ')')){
 
 				temp.push_back(input[i]);
 				temp.push_back(input[i+1]);
@@ -150,19 +152,11 @@ void engine::parseInput(char input[]){
 
 	}
 
-	// Now print out the contents of the vectors
-
-	for(i = 0; i < foundElements.size(); i++){
-
-		cout << "\n" << foundElements[i] << "\n";
-
-	}
-
 	// Now match the vector the public accesible vector
 
 	this->DATA_BASE.elementNames = foundElements;
 
-	/* BEGIN COUNTING THE AMOUNT OF ELEMENTS*/
+	/* BEGIN COUNTING THE AMOUNT OF ELEMENTS */
 
 	// Loop through each of the found elements
 
@@ -182,9 +176,81 @@ void engine::parseInput(char input[]){
 				paren = false;
 			}
 
-			// See if we've found the element
+			// See if we're looking for a single letter element
 
-			// TODO
+			if(foundElements[i].size() == 1){
+				
+				if(input[g] == foundElements[i].at(0)){
+
+					// Check to see if numbers are present after the element name and we're not in parenthesis mode
+
+					if(isdigit(input[g + 1]) && paren == false){
+						
+						digitsFound.push_back(input[g + 1] - '0');
+
+					}
+
+					// If no digit is specified and parenthesis mode is off, then assume one
+
+					if(!isdigit(input[g + 1]) && paren == false){
+						
+						digitsFound.push_back(1);
+
+					}
+
+					// If a digit is specified and we are in parenthesis mode do the multiplication
+
+					if(isdigit(input[g + 1]) && paren == true){
+
+						// Find the number after the next closing parenthesis in the input
+
+						for(j = g + 1; j < endOfString; j++){
+
+							if(input[j] == ')'){
+								
+								digitafterparen = input[j + 1];
+								break;
+							
+							}
+
+						}
+
+						digitsFound.push_back((input[g + 1] - '0') * digitafterparen);
+
+					}
+
+					// If a digit is not specified and we are in parenthesis mode do the multiplication with one
+
+					if(!isdigit(input[g + 1]) && paren == true){
+
+						// Find the number after the next closing parenthesis in the input
+
+						for(j = g + 1; j < endOfString; j++){
+
+							if(input[j] == ')'){
+								
+								digitafterparen = input[j + 1];
+								break;
+							
+							}
+
+						}
+
+						digitsFound.push_back(1 * digitafterparen);
+
+					}
+
+				}
+
+			}
+
+			// See if we're looking for a double letter element
+
+			if(foundElements[i].size() == 2){
+				
+				// TODO:
+			
+			}
 
 
 		}
@@ -203,5 +269,9 @@ void engine::parseInput(char input[]){
 		tempsum = 0;
 
 	}
+
+	// Inject into the public class
+
+	this->DATA_BASE.amountOfElement = amountOfFoundElements;
 
 }

@@ -9,7 +9,7 @@ public:
 	typedef struct {
 
 		vector <string> elementNames;
-		vector <string> amountOfElement;
+		vector <int> amountOfElement;
 
 
 
