@@ -235,7 +235,7 @@ void engine::parseInput(char input[]){
 
 							if(input[j] == ')'){
 								
-								digitafterparen = input[j + 1];
+								digitafterparen = input[j + 1] - '0';
 								break;
 							
 							}
@@ -270,9 +270,10 @@ void engine::parseInput(char input[]){
 
 		amountOfFoundElements.push_back(tempsum);
 
-		// Reset sum
+		// Reset sum and clear digitsFound
 
 		tempsum = 0;
+		digitsFound.clear();
 
 	}
 
