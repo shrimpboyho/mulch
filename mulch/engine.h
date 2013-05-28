@@ -23,6 +23,9 @@ public:
 
 	void parseInput(char stringInput[]);
 
+	void calculate(int length, int position);
+	void elementLookup(string element);
+
 	engine(void);
 	~engine(void);
 };

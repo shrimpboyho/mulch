@@ -282,3 +282,10 @@ void engine::parseInput(char input[]){
 	this->DATA_BASE.amountOfElement = amountOfFoundElements;
 
 }
+
+void engine::elementLookup(string element){}
+
+void engine::calculate(int length, int position) {
+	for(int i = 0; i < length; i++) {
+		elementLookup(this->DATA_BASE.elementNames[position + i]);	}
+}
