@@ -79,9 +79,13 @@ void engine::parseInput(char input[]){
 			continue;
 		}
 
-		// Check to make sure its not a + or = character
+		// Check to make sure its not a + or = character or parenthesis
 
 		if((input[i] == '+') || (input[i] == '=')){
+			continue;
+		}
+
+		if((input[i] == '(') || (input[i] == ')')){
 			continue;
 		}
 
@@ -101,7 +105,7 @@ void engine::parseInput(char input[]){
 
 			/* SINGLE LETTER CHECK! */
 
-			if(isupper(input[i]) && ( isupper(input[i+1]) || isdigit(input[i+1]) || isspace(input[i+1]))){
+			if(isupper(input[i]) && ( isupper(input[i+1]) || isdigit(input[i+1]) || isspace(input[i+1]) || input[i+1] == '(' || input[i+1] == ')' || input[i+1] == '+' || input[i+1] == '=')){
 
 				temp.push_back(input[i]);
 				
@@ -125,7 +129,7 @@ void engine::parseInput(char input[]){
 
 			/* DOUBLE LETTER CHECK! */
 
-			if(isupper(input[i]) && (!isupper(input[i+1])) && (!isspace(input[i+1])) && (!isdigit(input[i+1])) && (input[i+1] != '+')  && (input[i+1] != '=')  && (input[i+1] != ')')){
+			if(isupper(input[i]) && (!isupper(input[i+1])) && (!isspace(input[i+1])) && (!isdigit(input[i+1])) && (input[i+1] != '+')  && (input[i+1] != '=')  && (input[i+1] != ')')  && (input[i+1] != '(')){
 
 				temp.push_back(input[i]);
 				temp.push_back(input[i+1]);
@@ -170,10 +174,12 @@ void engine::parseInput(char input[]){
 			
 			if(input[g] == '('){
 				paren = true;
+				continue;
 			}
 
 			if(input[g] == ')'){
 				paren = false;
+				continue;
 			}
 
 			// See if we're looking for a single letter element
